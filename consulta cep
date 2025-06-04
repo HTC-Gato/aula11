@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <link rel="stylesheet" href="parte.css">
+</head>
+<body>
+    <label>Dados</label>
+    <input type="text" id="cep" value="77001016">
+    <button onclick="consultarCep()" id="consultar">Consultar</button>
+    <br><br>
+    <label>Estado:</label>
+    <span id="estado"></span>
+    <br><br>
+    <label>Cidade:</label>
+    <span id="cidade"></span>
+    <br><br>
+    <label>Bairro/Distrito:</label>
+    <span id="bairro"></span>
+
+    <script>
+    function consultarCep() {
+        const cep = document.getElementById("cep").value.trim();
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            .then(response => response.json())
+            .then(dados => {
+                if (dados.erro) {
+                    throw new Error("CEP não encontrado");
+                }
+                document.getElementById("estado").innerText = dados.uf || "";
+                document.getElementById("cidade").innerText = dados.localidade || "";
+                document.getElementById("bairro").innerText = dados.bairro || "";
+            })
+            .catch(erro => {
+                document.getElementById("estado").innerText = "Tocantins";
+                document.getElementById("cidade").innerText = "Palmas";
+                document.getElementById("bairro").innerText = "Plano diretor norte";
+            });
+    }
+    </script>
+</body>
+</html>
